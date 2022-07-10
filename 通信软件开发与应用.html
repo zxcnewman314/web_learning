@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>通信软件开发与应用</title>
+
+</head>
+<body>
+    <style>
+      div {
+        width: 100%;
+        height: 100%;
+        color: rgba(147, 101, 41, 0.804);
+        background-color: aqua;
+    } 
+    span {
+    color: rgb(135, 135, 39);
+}
+    </style>
+    <div> <span>项目内容:</span>
+        <p>本项目使用vue3.0框架实现angular项目中描述的'HeroTour',当在本地运行这个vue项目以前，需要执行npm i命令
+           安装相关依赖</p>
+           <span>开发过程:</span>
+           首先应该知道项目大概的实现效果，可以点击hero查看它的具体信息，可以删除hero，可以添加hero,可以显示
+           具有一定特性的hero，可以动态改变hero的属性；
+           我们将hero的属性设为3个：id(用于在程序中标记确认一个hero),name(用于向用户显示hero的名称信息),
+           level(用于展示hero的等级)
+           <pre>首先需要定义一个hero数组
+            export const hr1 = [
+    { id: 11, name: '犀牛战士' ,level:3},
+    { id: 12, name: '黑武士' ,level:3},
+    { id: 13, name: '亡灵法师' ,level:82},
+    { id: 14, name: '虚空吞噬者',level:83 },
+    { id: 15, name: '幻影刀客',level:7 },
+    { id: 16, name: '超重武僧' ,level:13},
+    { id: 17, name: '母大虫',level:8 },
+    { id: 18, name: '毒博士',level:92 },
+    { id: 19, name: '瑜伽怪男',level:3 },
+    { id: 20, name: '乒乓熊猫' ,level:5},
+    { id: 22, name: '菜鸟新手' ,level:0},
+    { id:300,name:'dindindin',level:23},
+  ];
+           </pre>
+           然后定义一个messageservice消息函数：
+           <pre>
+            export default class MessageService {
+                constructor(){
+                  if(!MessageService.instance){
+                    this.messages = ref([]);
+                    MessageService.instance = this;
+                  }
+                  return MessageService.instance
+                }
+                add(message) {
+                  this.messages.value.push(message);
+                }
+                clear() {
+                  this.messages.value = [];
+                }
+              }
+              
+           </pre>
+           在此之后，定义一个函数取出数组元素：
+           <pre>export default function fetchHeros(){
+            let heromen=hr1;
+            new MessageService().add("fetched heroes");
+            return heromen;
+        }
+        以及一个函数用来得到我们选中的hero
+        let selectedHero = reactive({});
+function onSelect(hero) {
+  Object.assign(selectedHero,hero);
+  messageService.add(hero.name); 
+}     </pre>
+    <span>展示的相关内容</span>
+    <pre>
+        在vue中，我们可以用如下的代码依次取出数组元素
+        <li v-for="hero in  mahero"  v-bind:key='hero.id' @click=" onSelect(hero)" :class="{'selected': 
+     hero.id === selectedHero.id}">
+        另外对于显示，可以加上对于hero属性的筛选条件
+        <span class="badge"  v-if="hero.level>80" ><span>id: </span>{{ hero.id }} <span>
+            姓名: </span>{{ hero.name }}
+
+    </pre>
+    另外有一个非常重要的地方，就是我们使用了多个组件，这里就需要进行注册：
+    <pre>import HeroDetail from "./HeroDetail.vue";
+        import message from "./message.vue";
+        components: { HeroDetail,message },
+       
+         一个vue文件可以注册另外的vue文件，但最终要在项目使用，必须要在main.js文件进行注册
+         const hs=createApp(maHero);
+         hs.mount('#hhero');
+    </pre>
+    我们还需要props组件，用于在组件上注册属性，它可以将传参变成一个相应的属性值；
+        <pre>
+            props: ["hero"]
+            let hero = toRefs(props);
+        </pre>
+     看看实际运行效果：  
+            初始筛选出等级大于80的hero
+           <img src="./QQ图片20220709210157.png">
+           <br>
+            点击hero之后，信息被展示
+           <img src="./QQ图片20220709210225.png">
+           <br>
+           界面下端出现hero具体信息
+           <img src="./QQ图片20220709210229.png">
+           <br>
+           可以动态更改hero信息
+           <img src="./QQ图片20220709210232.png">
+           <br>
+           <span>项目问题</span>
+           <p>主要是没有完成hero的删除功能</p>
+        </div>
+    
+</body>
+<script type="text/javascript" charset="UTF-8">
+    
+    
+
+</script>
+
+</html>
